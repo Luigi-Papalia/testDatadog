@@ -31,8 +31,8 @@ jobs:
       - name: Download and run OWASP ZAP
         run: |
           ZAP_VERSION="${{ steps.zap_version.outputs.zap_version }}"
-          ZAP_URL="https://github.com/zaproxy/zaproxy/releases/download/v$ZAP_VERSION/ZAP_$ZAP_VERSION/_Linux.tar.gz"
-          wget -q -O zap.tar.gz $ZAP_URL
+          ZAP_URL="https://github.com/zaproxy/zaproxy/releases/download/v$ZAP_VERSION/ZAP_${ZAP_VERSION}_Linux.tar.gz"
+          wget -q -O zap.tar.gz "$ZAP_URL"
           tar -xzf zap.tar.gz
           echo "ZAP_HOME=$(pwd)/ZAP_$ZAP_VERSION" >> $GITHUB_ENV
 
