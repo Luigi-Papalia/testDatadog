@@ -28,18 +28,18 @@ jobs:
     
     # Step X: Cache stuff so it doesn't take too long to compile each time
     - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
     # Step 5: Build with Gradle
     - name: Build with Gradle
-        run: ./gradlew build
+      run: ./gradlew build
 
     # Step 4: Build Docker image 
     - name: Build Docker image
