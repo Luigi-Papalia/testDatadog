@@ -1,0 +1,47 @@
+name: OWASP ZAP DAST Scan
+
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+  push:
+    branches: ["main"]
+
+jobs:
+  zap_scan:
+    name: OWASP ZAP DAST Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Fetch latest OWASP ZAP version
+        id: zap_version
+        run: |
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/zaproxy/zaproxy/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+          echo "Latest OWASP ZAP version: $LATEST_VERSION"
+          echo "ZAP_VERSION=${LATEST_VERSION#v}" >> $GITHUB_OUTPUT  # Remove the 'v' prefix from the tag
+
+      - name: Download and run OWASP ZAP
+        run: |
+          ZAP_VERSION="${{ steps.zap_version.outputs.zap_version }}"
+          ZAP_URL="https://github.com/zaproxy/zaproxy/releases/download/v$ZAP_VERSION/ZAP_$ZAP_VERSION\_Linux.tar.gz"
+          wget -q -O zap.tar.gz $ZAP_URL
+          tar -xzf zap.tar.gz
+          echo "ZAP_HOME=$(pwd)/ZAP_$ZAP_VERSION" >> $GITHUB_ENV
+
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          $ZAP_HOME/zap.sh -cmd -quickurl "${{ secrets.TARGET_URL }}" -quickprogress -quickout /github/workspace/zap_report.html
+          echo "ZAP report generated: /github/workspace/zap_report.html"
+
+      - name: Upload ZAP Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: /github/workspace/zap_report.html
