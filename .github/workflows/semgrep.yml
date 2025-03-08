@@ -25,4 +25,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Perform Semgrep Analysis
-        run: semgrep scan -q --sarif --config r/all --pro-languages --exclude-rules javascript.crypto-js.cryptojs-weak-algorithm.cryptojs-weak-algorithm ./
+        run: semgrep scan -q --config r/all --pro-languages ./
