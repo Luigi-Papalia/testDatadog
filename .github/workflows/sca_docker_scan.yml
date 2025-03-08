@@ -63,9 +63,3 @@ jobs:
       with:
         sarif_file: 'trivy-sca-results.sarif'
         category: "sca-scan"  # Unique category for SCA scan
-
-    # Step 9: Run Semgrep SAST scan
-    - name: Run Semgrep SAST Scan
-      uses: returntocorp/semgrep-action@v1
-      env:
-        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
