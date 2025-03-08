@@ -25,4 +25,3 @@ jobs:
 
       - name: Perform Semgrep Analysis
         run: semgrep ci --config auto --pro
-        working-directory: /github/workspace/
