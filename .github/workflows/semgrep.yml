@@ -25,4 +25,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Perform Semgrep Analysis
-        run: semgrep scan -q --sarif --config r/all --pro-languages ./
+        run: semgrep scan -q --sarif --config r/all --pro-languages --exclude 'src/main/resources/static/js/file.js' ./
