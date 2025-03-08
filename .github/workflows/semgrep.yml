@@ -6,15 +6,20 @@ on:
       - main
 
 jobs:
-  semgrep:
+  semgrep_scan:
     name: semgrep/ci
     runs-on: self-hosted
-    permissions:
-      contents: read
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
       image: semgrep/semgrep
+
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
     steps:
-    - uses: actions/checkout@v4
-    - run: semgrep ci
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Perform Semgrep Analysis
+        run: semgrep scan -q --sarif --config r/all ./
