@@ -8,7 +8,7 @@ on:
 jobs:
   semgrep_scan:
     name: semgrep/ci
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     container:
       image: semgrep/semgrep
 
@@ -25,4 +25,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Perform Semgrep Analysis
-        run: semgrep scan -q --sarif --config r/all --pro-languages --exclude 'src/main/resources/static/js/file.js' ./
+        run: semgrep scan -q --sarif --config r/all --pro-languages --exclude-rules javascript.crypto-js.cryptojs-weak-algorithm.cryptojs-weak-algorithm ./
