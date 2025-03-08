@@ -1,0 +1,28 @@
+name: Semgrep SAST Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  semgrep_scan:
+    name: semgrep/ci
+    runs-on: self-hosted
+    container:
+      image: semgrep/semgrep
+
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Perform Semgrep Analysis
+        run: semgrep scan -q --sarif --config r/all --pro-languages --exclude 'src/main/resources/static/js/file.js' ./
