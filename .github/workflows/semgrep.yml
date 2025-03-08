@@ -24,4 +24,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Perform Semgrep Analysis
-        run: semgrep ci --config auto --pro /github/workspace/
+        run: semgrep ci --config auto --pro
+        working-directory: /github/workspace/
