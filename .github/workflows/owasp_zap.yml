@@ -46,7 +46,7 @@ jobs:
           echo "now the $GITHUB_ENV"
           $ZAP_HOME/zap.sh -cmd -quickurl "${{ secrets.TARGET_URL }}" -quickprogress -quickout /github/workspace/zap_report.json
           echo "The ZAP_HOME = $ZAP_HOME"
-          echo "ZAP report generated: /github/workspace/zap_report.html"
+          echo "ZAP report generated: /github/workspace/zap_report.json"
 
       - name: Upload ZAP Report as Artifact
         uses: actions/upload-artifact@v4
