@@ -24,21 +24,28 @@ jobs:
       - name: Fetch latest OWASP ZAP version
         id: zap_version
         run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/zaproxy/zaproxy/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
-          echo "Latest OWASP ZAP version: $LATEST_VERSION"
-          echo "ZAP_VERSION=${LATEST_VERSION#v}" >> $GITHUB_OUTPUT  # Remove the 'v' prefix from the tag
+        # LATEST_VERSION=$(curl -s https://api.github.com/repos/zaproxy/zaproxy/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+        # echo "Latest OWASP ZAP version: $LATEST_VERSION"
+        # echo "ZAP_VERSION=${LATEST_VERSION#v}" >> $GITHUB_OUTPUT  # Remove the 'v' prefix from the tag
 
       - name: Download and run OWASP ZAP
         run: |
-          ZAP_VERSION="${{ steps.zap_version.outputs.zap_version }}"
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/zaproxy/zaproxy/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+          echo "Latest OWASP ZAP version: $LATEST_VERSION"
+          ZAP_VERSION=${LATEST_VERSION#v}
           ZAP_URL="https://github.com/zaproxy/zaproxy/releases/download/v$ZAP_VERSION/ZAP_${ZAP_VERSION}_Linux.tar.gz"
           wget -q -O zap.tar.gz "$ZAP_URL"
+          echo "finished the wget"
           tar -xzf zap.tar.gz
+          echo "finished extracting stuff"
           echo "ZAP_HOME=$(pwd)/ZAP_$ZAP_VERSION" >> $GITHUB_ENV
+          echo "now the $GITHUB_ENV"
 
       - name: Run OWASP ZAP Baseline Scan
         run: |
-          $ZAP_HOME/zap.sh -cmd -quickurl "${{ secrets.TARGET_URL }}" -quickprogress -quickout /github/workspace/zap_report.html
+          echo "now the $GITHUB_ENV"
+          $ZAP_HOME/zap.sh -cmd -quickurl "${{ secrets.TARGET_URL }}" -quickprogress -quickout /github/workspace/zap_report.json
+          echo "The ZAP_HOME = $ZAP_HOME"
           echo "ZAP report generated: /github/workspace/zap_report.html"
 
       - name: Upload ZAP Report as Artifact
