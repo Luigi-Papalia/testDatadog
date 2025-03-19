@@ -44,12 +44,12 @@ jobs:
       - name: Run OWASP ZAP Baseline Scan
         run: |
           echo "now the $GITHUB_ENV"
-          $ZAP_HOME/zap.sh -cmd -quickurl "${{ secrets.TARGET_URL }}" -quickprogress -quickout /github/workspace/zap_report.json
+          $ZAP_HOME/zap.sh -cmd -quickurl "${{ secrets.TARGET_URL }}" -quickprogress -quickout /home/garou/zap_report.json
           echo "The ZAP_HOME = $ZAP_HOME"
-          echo "ZAP report generated: /github/workspace/zap_report.json"
+          echo "ZAP report generated: /home/garou/zap_report.json"
 
       - name: Upload ZAP Report as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: /github/workspace/zap_report.json
+          path: /home/garou/zap_report.json
